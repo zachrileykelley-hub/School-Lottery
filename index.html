@@ -410,13 +410,14 @@ Taylor Brown"></textarea>
           </div>
         </div>
       </div>
-
+<!--
       <div class="tech-notes">
         <strong>Technical notes for transparency:</strong><br>
         This tool uses the Fisher Yates shuffle, a standard algorithm that gives every ordering of the list an equal chance. Random numbers come from the browser <code>crypto.getRandomValues</code> function with rejection sampling, which avoids bias and is suitable for security sensitive uses. Results from each run can be exported for record keeping.
       </div>
     </div>
   </div>
+      --!>
 
   <script>
     const namesInput = document.getElementById("namesInput");
@@ -851,4 +852,5 @@ const waitlistList = lastWaitlist.map(name =>
   </script>
 </body>
 </html>
+
 
