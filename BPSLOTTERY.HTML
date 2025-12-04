@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Birmingham Public Schools Lottery</title>
+  <style>
+    :root {
+      --bps-blue: #306FB4;
+      --bps-navy: #13295C;
+      --bps-gold: #FFAD1F;
+      --bps-gray: #D9D9D9;
+      --bg-light: #f3f4f6;
+      --text-main: #111827;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background: var(--bg-light);
+      color: var(--text-main);
+    }
+
+    .shell {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 18px;
+      background: var(--bps-navy);
+      color: white;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .header-logo {
+      height: 56px;
+    }
+
+    .header-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .header-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .header-subtitle {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .container {
+      background: #ffffff;
+      border-radius: 0 0 12px 12px;
+      padding: 20px 24px 28px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      margin: 0 0 4px;
+      font-size: 1.2rem;
+      color: var(--bps-navy);
+    }
+
+    .info {
+      font-size: 0.85rem;
+      color: #4b5563;
+      margin-bottom: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      gap: 20px;
+      margin-top: 8px;
+      align-items: start;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 260px;
+      resize: vertical;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 0.95rem;
+    }
+
+    textarea:focus,
+    input:focus {
+      outline: none;
+      border-color: var(--bps-blue);
+      box-shadow: 0 0 0 2px rgba(48, 111, 180, 0.2);
+    }
+
+    input[type="number"] {
+      width: 120px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 0.95rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 6px;
+      margin-bottom: 6px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--bps-blue);
+      color: white;
+      box-shadow: 0 5px 12px rgba(48, 111, 180, 0.35);
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.12s ease;
+    }
+
+    button:hover {
+      background: #255f9e;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(48, 111, 180, 0.35);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(48, 111, 180, 0.3);
+    }
+
+    button.secondary {
+      background: var(--bps-gray);
+      color: #111827;
+      box-shadow: none;
+    }
+
+    button.secondary:hover {
+      background: #cfd1d4;
+      box-shadow: none;
+    }
+
+    button.small {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      box-shadow: none;
+    }
+
+    .error {
+      color: #b91c1c;
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .note {
+      font-size: 0.8rem;
+      color: #4b5563;
+      margin-top: 4px;
+    }
+
+    .export-controls {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .export-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #374151;
+      margin-right: 4px;
+    }
+
+    .spinner-card {
+      background: var(--bps-navy);
+      border-radius: 16px;
+      padding: 16px 16px 14px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .spinner-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .spinner-logo {
+      height: 40px;
+      width: 40px;
+      border-radius: 999px;
+      background: white;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spinner-logo img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    .spinner-header-text {
+      text-align: right;
+    }
+
+    .spinner-header-title {
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.95;
+    }
+
+    .spinner-header-sub {
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+
+    .current-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-top: 8px;
+      min-height: 2.3em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .status {
+      font-size: 0.85rem;
+      opacity: 0.85;
+      margin-top: 4px;
+      text-align: center;
+    }
+
+    .result-section {
+      margin-top: 12px;
+      background: #020617;
+      border-radius: 12px;
+      padding: 8px 10px;
+      text-align: left;
+      max-height: 150px;
+      overflow: auto;
+      font-size: 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+
+    .result-section h3 {
+      font-size: 0.8rem;
+      margin: 0 0 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      opacity: 0.85;
+      color: var(--bps-gold);
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 0.78rem;
+      margin: 1px;
+      white-space: nowrap;
+    }
+
+    .pill.winner {
+      border-color: #22c55e;
+      background: rgba(22, 163, 74, 0.15);
+    }
+
+    .pill.waitlist {
+      border-color: var(--bps-gold);
+      background: rgba(248, 184, 60, 0.12);
+    }
+
+    .tech-notes {
+      margin-top: 16px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+
+    .tech-notes strong {
+      color: var(--bps-navy);
+    }
+
+    @media (max-width: 800px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .spinner-card {
+        order: -1;
+      }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="header">
+      <img src="bps-logo-horizontal.png" alt="Birmingham Public Schools" class="header-logo">
+      <div class="header-text">
+        <div class="header-title">Lottery Selector</div>
+        <div class="header-subtitle">Randomized enrollment and waitlist tool</div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h2>Student Lottery</h2>
+      <p class="info">
+        Enter one student name per line, choose the number of available seats, then run the lottery. The app uses a cryptographically secure shuffle to select students and build a waitlist.
+      </p>
+
+      <div class="grid">
+        <div>
+          <label for="namesInput">Student names (one per line)</label>
+          <textarea id="namesInput" placeholder="Example:
+Alex Smith
+Jordan Lee
+Taylor Brown"></textarea>
+
+          <div class="controls">
+            <div>
+              <label for="seatCount">Number of available seats</label>
+              <input type="number" id="seatCount" min="1" value="1">
+            </div>
+            <div>
+              <button id="runBtn">Run lottery</button>
+              <button id="clearBtn" class="secondary">Clear</button>
+            </div>
+          </div>
+          <div id="error" class="error"></div>
+
+          <div class="export-controls">
+            <span class="export-label">Export results:</span>
+            <button id="copyBtn" class="secondary small">Copy list</button>
+            <button id="csvBtn" class="secondary small">Download CSV</button>
+            <button id="printBtn" class="secondary small">Printable summary</button>
+          </div>
+
+          <div class="note">
+            Run the lottery first, then use the export buttons to save or share the results.
+          </div>
+        </div>
+
+        <div class="spinner-card">
+          <div>
+            <div class="spinner-header-row">
+              <div class="spinner-logo">
+                <img src="bps-logo-mark.png" alt="BPS Compass logo">
+              </div>
+              <div class="spinner-header-text">
+                <div class="spinner-header-title">BPS Lottery</div>
+                <div class="spinner-header-sub">Fisher Yates shuffle with cryptographic randomness</div>
+              </div>
+            </div>
+
+            <div id="currentName" class="current-name">Waiting to start</div>
+            <div id="statusText" class="status">Click Run lottery to begin</div>
+          </div>
+
+          <div class="result-section">
+            <h3>Selected</h3>
+            <div id="winnersBox"></div>
+
+            <h3 style="margin-top:8px;">Waitlist</h3>
+            <div id="waitlistBox"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tech-notes">
+        <strong>Technical notes for transparency:</strong><br>
+        This tool uses the Fisher Yates shuffle, a standard algorithm that gives every ordering of the list an equal chance. Random numbers come from the browser <code>crypto.getRandomValues</code> function with rejection sampling, which avoids bias and is suitable for security sensitive uses. Results from each run can be exported for record keeping.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const namesInput = document.getElementById("namesInput");
+    const seatCountInput = document.getElementById("seatCount");
+    const runBtn = document.getElementById("runBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const csvBtn = document.getElementById("csvBtn");
+    const printBtn = document.getElementById("printBtn");
+    const errorEl = document.getElementById("error");
+
+    const currentNameEl = document.getElementById("currentName");
+    const statusTextEl = document.getElementById("statusText");
+    const winnersBox = document.getElementById("winnersBox");
+    const waitlistBox = document.getElementById("waitlistBox");
+
+    let spinning = false;
+    let spinAnimationId = null;
+
+    let lastWinners = [];
+    let lastWaitlist = [];
+    let lastRunTimestamp = null;
+
+    function parseNames() {
+      const raw = namesInput.value.split("\n");
+      const cleaned = raw
+        .map(n => n.trim())
+        .filter(n => n.length > 0);
+      return cleaned;
+    }
+
+    function cryptoRandomInt(maxExclusive) {
+      if (!window.crypto || !window.crypto.getRandomValues) {
+        return Math.floor(Math.random() * maxExclusive);
+      }
+
+      if (maxExclusive <= 0 || maxExclusive > 0xffffffff) {
+        throw new Error("maxExclusive out of range");
+      }
+
+      const uint32 = new Uint32Array(1);
+      const range = 0x100000000;
+      const limit = range - (range % maxExclusive);
+
+      let x;
+      do {
+        window.crypto.getRandomValues(uint32);
+        x = uint32[0];
+      } while (x >= limit);
+
+      return x % maxExclusive;
+    }
+
+    function shuffle(array) {
+      const arr = array.slice();
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = cryptoRandomInt(i + 1);
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function renderResults(winners, waitlist) {
+      winnersBox.innerHTML = "";
+      waitlistBox.innerHTML = "";
+
+      if (winners.length === 0) {
+        winnersBox.textContent = "No selections yet.";
+      } else {
+        winners.forEach((name, index) => {
+          const span = document.createElement("span");
+          span.className = "pill winner";
+          span.textContent = (index + 1) + ". " + name;
+          winnersBox.appendChild(span);
+        });
+      }
+
+      if (waitlist.length === 0) {
+        waitlistBox.textContent = "No one on the waitlist.";
+      } else {
+        waitlist.forEach((name, index) => {
+          const span = document.createElement("span");
+          span.className = "pill waitlist";
+          span.textContent = (index + 1) + ". " + name;
+          waitlistBox.appendChild(span);
+        });
+      }
+    }
+
+    function stopSpinAnimation() {
+      spinning = false;
+      if (spinAnimationId) {
+        cancelAnimationFrame(spinAnimationId);
+        spinAnimationId = null;
+      }
+    }
+
+    function startSpinAnimation(namePool, finalName, onDone) {
+      stopSpinAnimation();
+      spinning = true;
+      currentNameEl.textContent = "";
+      statusTextEl.textContent = "Spinning names";
+
+      const start = performance.now();
+      const totalDuration = 3500 + Math.random() * 2000;
+      let lastChange = 0;
+
+      function step(timestamp) {
+        if (!spinning) return;
+        const elapsed = timestamp - start;
+        const progress = Math.min(elapsed / totalDuration, 1);
+
+        const minDelay = 40;
+        const maxDelay = 250;
+        const delay = minDelay + (maxDelay - minDelay) * progress;
+
+        if (timestamp - lastChange >= delay) {
+          if (namePool.length > 0) {
+            const idx = cryptoRandomInt(namePool.length);
+            currentNameEl.textContent = namePool[idx];
+          }
+          lastChange = timestamp;
+        }
+
+        if (progress < 1) {
+          spinAnimationId = requestAnimationFrame(step);
+        } else {
+          currentNameEl.textContent = finalName;
+          statusTextEl.textContent = "Selection complete";
+          spinning = false;
+          if (typeof onDone === "function") {
+            onDone();
+          }
+        }
+      }
+
+      spinAnimationId = requestAnimationFrame(step);
+    }
+
+    function ensureResultsAvailable() {
+      if (!lastWinners.length && !lastWaitlist.length) {
+        errorEl.textContent = "Run the lottery before exporting results.";
+        return false;
+      }
+      return true;
+    }
+
+    function buildTextSummary() {
+      const ts = lastRunTimestamp
+        ? lastRunTimestamp.toLocaleString()
+        : "Not recorded";
+
+      let text = "";
+      text += "Birmingham Public Schools Lottery Results\n";
+      text += "Run at: " + ts + "\n\n";
+
+      text += "Selected:\n";
+      if (lastWinners.length === 0) {
+        text += "  (none)\n";
+      } else {
+        lastWinners.forEach((name, idx) => {
+          text += String(idx + 1) + ". " + name + "\n";
+        });
+      }
+
+      text += "\nWaitlist:\n";
+      if (lastWaitlist.length === 0) {
+        text += "  (none)\n";
+      } else {
+        lastWaitlist.forEach((name, idx) => {
+          text += String(idx + 1) + ". " + name + "\n";
+        });
+      }
+
+      return text;
+    }
+
+    function escapeCSVField(value) {
+      const needsQuotes = /[",\n]/.test(value);
+      let result = value.replace(/"/g, '""');
+      if (needsQuotes) {
+        result = '"' + result + '"';
+      }
+      return result;
+    }
+
+    function buildCSV() {
+      const rows = [];
+      rows.push(["Category", "Position", "Name"]);
+
+      lastWinners.forEach((name, idx) => {
+        rows.push(["Selected", String(idx + 1), name]);
+      });
+
+      lastWaitlist.forEach((name, idx) => {
+        rows.push(["Waitlist", String(idx + 1), name]);
+      });
+
+      const lines = rows.map(row =>
+        row.map(escapeCSVField).join(",")
+      );
+
+      return lines.join("\r\n");
+    }
+
+    function downloadCSV() {
+      const csvContent = buildCSV();
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+
+      const ts = lastRunTimestamp
+        ? lastRunTimestamp.toISOString().slice(0, 19).replace(/[:T]/g, "-")
+        : "results";
+
+      const fileName = "bps_lottery_results_" + ts + ".csv";
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function openPrintableSummary() {
+      const tsString = lastRunTimestamp
+        ? lastRunTimestamp.toLocaleString()
+        : "Not recorded";
+
+      const winnersList = lastWinners.map(name =>
+  "<li>" + name + "</li>"
+).join("");
+
+const waitlistList = lastWaitlist.map(name =>
+  "<li>" + name + "</li>"
+).join("");
+
+
+      const newWindow = window.open("", "_blank");
+      if (!newWindow) {
+        alert("Popup blocked. Please allow popups for this site to see the printable summary.");
+        return;
+      }
+
+      const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BPS Lottery Results</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 20px;
+      color: #111827;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #13295C;
+      padding-bottom: 8px;
+    }
+    .header-logo {
+      height: 48px;
+    }
+    h1 {
+      font-size: 1.4rem;
+      margin: 0;
+      color: #13295C;
+    }
+    .meta {
+      font-size: 0.9rem;
+      margin: 4px 0 12px;
+      color: #374151;
+    }
+    h2 {
+      font-size: 1.1rem;
+      margin-top: 16px;
+      color: #13295C;
+    }
+    ol {
+      margin-top: 6px;
+    }
+    li {
+      margin: 2px 0;
+    }
+    .tech {
+      margin-top: 18px;
+      font-size: 0.8rem;
+      color: #4b5563;
+      padding-top: 10px;
+      border-top: 1px solid #e5e7eb;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="bps-logo-horizontal.png" class="header-logo" alt="Birmingham Public Schools">
+    <div>
+      <h1>Lottery Results</h1>
+      <div class="meta">Run at: ${tsString}</div>
+    </div>
+  </div>
+
+  <h2>Selected</h2>
+  ${lastWinners.length ? "<ol>" + winnersList + "</ol>" : "<p>No students selected.</p>"}
+
+  <h2>Waitlist</h2>
+  ${lastWaitlist.length ? "<ol>" + waitlistList + "</ol>" : "<p>No students on the waitlist.</p>"}
+
+  <div class="tech">
+    This lottery uses the Fisher Yates shuffle with random numbers from the browser crypto.getRandomValues function to ensure an unbiased, cryptographically secure draw.
+  </div>
+</body>
+</html>
+      `;
+
+      newWindow.document.open();
+      newWindow.document.write(html);
+      newWindow.document.close();
+
+      newWindow.focus();
+      newWindow.print();
+    }
+
+    runBtn.addEventListener("click", () => {
+      errorEl.textContent = "";
+      const names = parseNames();
+      const seatCount = parseInt(seatCountInput.value, 10);
+
+      if (names.length === 0) {
+        errorEl.textContent = "Please enter at least one name.";
+        return;
+      }
+
+      if (!Number.isInteger(seatCount) || seatCount <= 0) {
+        errorEl.textContent = "Number of seats must be a positive whole number.";
+        return;
+      }
+
+      if (seatCount > names.length) {
+        errorEl.textContent = "Seats requested are more than the number of names entered.";
+        return;
+      }
+
+      const shuffled = shuffle(names);
+      const winners = shuffled.slice(0, seatCount);
+      const waitlist = shuffled.slice(seatCount);
+
+      renderResults([], []);
+      currentNameEl.textContent = "Preparing draw";
+      statusTextEl.textContent = "Randomizing entries";
+
+      setTimeout(() => {
+        startSpinAnimation(names, winners[0], () => {
+          renderResults(winners, waitlist);
+          statusTextEl.textContent = `Selected ${winners.length} and created a waitlist of ${waitlist.length}.`;
+
+          lastWinners = winners;
+          lastWaitlist = waitlist;
+          lastRunTimestamp = new Date();
+        });
+      }, 400);
+    });
+
+    clearBtn.addEventListener("click", () => {
+      stopSpinAnimation();
+      namesInput.value = "";
+      seatCountInput.value = 1;
+      errorEl.textContent = "";
+      currentNameEl.textContent = "Waiting to start";
+      statusTextEl.textContent = "Click Run lottery to begin";
+      winnersBox.textContent = "";
+      waitlistBox.textContent = "";
+      lastWinners = [];
+      lastWaitlist = [];
+      lastRunTimestamp = null;
+    });
+
+    copyBtn.addEventListener("click", () => {
+      if (!ensureResultsAvailable()) return;
+
+      const text = buildTextSummary();
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          statusTextEl.textContent = "Results copied to clipboard.";
+        }).catch(() => {
+          errorEl.textContent = "Could not access clipboard.";
+        });
+      } else {
+        const temp = document.createElement("textarea");
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        try {
+          document.execCommand("copy");
+          statusTextEl.textContent = "Results copied to clipboard.";
+        } catch (e) {
+          errorEl.textContent = "Could not copy results.";
+        }
+        document.body.removeChild(temp);
+      }
+    });
+
+    csvBtn.addEventListener("click", () => {
+      if (!ensureResultsAvailable()) return;
+      downloadCSV();
+      statusTextEl.textContent = "CSV downloaded.";
+    });
+
+    printBtn.addEventListener("click", () => {
+      if (!ensureResultsAvailable()) return;
+      openPrintableSummary();
+    });
+
+    namesInput.value = [
+      "Alex Smith",
+      "Jordan Lee",
+      "Taylor Brown",
+      "Riley Johnson",
+      "Casey Martinez",
+      "Morgan Davis",
+      "Avery Wilson",
+      "Sam Patel",
+      "Jamie Clark",
+      "Parker Nguyen"
+    ].join("\n");
+  </script>
+</body>
+</html>
