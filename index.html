@@ -373,7 +373,7 @@
           <div class="controls">
             <div>
               <label for="seatCount">Number of available seats</label>
-              <input type="number" id="seatCount" min="1" value="1" />
+              <input type="number" id="seatCount" min="0" value="0" />
             </div>
             <div>
               <button id="runBtn">Run lottery</button>
@@ -912,8 +912,8 @@
         return;
       }
 
-      if (!Number.isInteger(seatCount) || seatCount <= 0) {
-        errorEl.textContent = "Number of seats must be a positive whole number.";
+      if (!Number.isInteger(seatCount) || seatCount < 0) {
+        errorEl.textContent = "Number of seats must be 0 or a positive whole number.";
         return;
       }
 
@@ -1033,3 +1033,4 @@
   </script>
 </body>
 </html>
+
